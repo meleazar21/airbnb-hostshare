@@ -1,42 +1,42 @@
-interface IImageDetail {
+export interface IImageDetail {
     url: string;
     width: number;
     heigh: number;
     type: string;
 }
-interface IDetailObj {
+export interface IDetailObj {
     type: string;
     value: number;
 }
 
-interface IImages {
+export interface IImages {
     data: Array<IImageDetail>;
 }
-interface IDetail {
+export interface IDetail {
     data: Array<IDetailObj>
 }
 
-interface IAmenitiesObj {
+export interface IAmenitiesObj {
     group: string;
     available: string;
     title: string;
     type: string;
 }
 
-interface IRatings {
+export interface IRatings {
     guestSatisfactionOverall: number;
 }
 
-interface IAmenities {
+export interface IAmenities {
     data: Array<IAmenitiesObj>
 }
 
-interface ICountry {
+export interface ICountry {
     code: string;
     title: string;
 }
 
-interface ILocation {
+export interface ILocation {
     lat: number;
     long: number;
     address: string;
@@ -45,12 +45,21 @@ interface ILocation {
     zip: string;
 }
 
-interface ICurrency {
+export interface ICurrency {
     code: string;
     symbol: string;
     name: string;
 }
 
+export interface IAvatar {
+    url: string;
+    type: string;
+}
+
+export interface IHost {
+    name: string;
+    avatar: IAvatar;
+}
 export interface IInfo {
     type: string;
     images: IImages;
@@ -66,6 +75,7 @@ export interface IInfo {
     price: number;
     currency: ICurrency;
     visibleReviewCount: number;
+    host: IHost;
 }
 
 export interface IProperty {
