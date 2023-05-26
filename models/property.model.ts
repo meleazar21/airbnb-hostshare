@@ -65,6 +65,7 @@ export interface IInfo {
     ratings: IRatings
     price: number;
     currency: ICurrency;
+    visibleReviewCount: number;
 }
 
 export interface IProperty {
