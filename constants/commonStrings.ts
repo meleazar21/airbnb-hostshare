@@ -1,4 +1,4 @@
 import { env } from "process";
 
-export const CLEANING_FEE = process.env.NEXT_PUBLIC_CLEANING_FEE ?? "10";
-export const AIRBNB_FEE = process.env.NEXT_PUBLIC_AIRBNB_FEE ?? "100";
+export const HOSTSHARE_FEE = process.env.NEXT_PUBLIC_HOSTSHARE_FEE ?? "100";
+export const MINIMUM_GUESTS = process.env.NEXT_PUBLIC_MINIMUM_GUESTS ?? "2"

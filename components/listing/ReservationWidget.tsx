@@ -1,18 +1,77 @@
+import { FormEvent, useEffect, useState } from "react";
 import StarIcon from "../icons/StarIcon";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { getNumberOfNights } from "@/utils/dates.utils";
+import { HOSTSHARE_FEE, MINIMUM_GUESTS } from "@/constants/commonStrings";
 
 interface IReservationWidget {
-    pricePerNight: string;
+    pricePerNight: number;
+    currencyCode: string;
+    currencySymbol: string;
     rating: number;
     reviews: number;
+    guestCapacity: number;
+}
+
+interface IReservationStates {
+    guests: string;
+    startDate: Date;
+    endDate: Date;
+    nights: number;
+    subtotal: number;
+    total: number;
 }
 
 const ReservationWidget = (props: IReservationWidget) => {
+
+    const [reservationStates, setReservationStates] = useState<IReservationStates>({ guests: "2", startDate: new Date(), endDate: new Date(new Date().setDate(new Date().getDate() + 1)), nights: 0, subtotal: 0, total: 0 });
+
+    const handleChange = (e: FormEvent<HTMLInputElement>) => {
+        const { value, name } = e.currentTarget;
+        switch (name) {
+            case "start":
+                setReservationStates({
+                    ...reservationStates,
+                    startDate: new Date(value)
+                });
+                break;
+            case "end":
+                setReservationStates({
+                    ...reservationStates,
+                    endDate: new Date(value)
+                });
+                break;
+            case "guests":
+                setReservationStates({
+                    ...reservationStates,
+                    guests: value
+                });
+                break;
+        }
+
+    }
+
+    const calculateSubtotal = (price: number, nights: number, guests: number, guestsLimit: number) => {
+        if (guests <= parseInt(MINIMUM_GUESTS) && nights > 0 && guests > 0) return price;
+        const pricePerGuest = price / guestsLimit;
+        const result = pricePerGuest * guests * nights;
+        return result;
+    }
+
+    useEffect(() => {
+        const nights = getNumberOfNights(reservationStates.startDate, reservationStates.endDate);
+        const subtotal = calculateSubtotal(props.pricePerNight, nights, reservationStates.guests ? parseInt(reservationStates.guests) : 0, props.guestCapacity);
+        const total = subtotal + (subtotal > 0 ? parseInt(HOSTSHARE_FEE) : 0);
+        setReservationStates({ ...reservationStates, nights: nights, subtotal, total });
+    }, [reservationStates.startDate, reservationStates.endDate, reservationStates.guests])
+
     return (
         <>
             <div className="p-4 max-w-sm rounded overflow-hidden shadow-lg w-full">
                 <div className="flex justify-between">
                     <p>
-                        <span className="text-xl font-bold leading-none tracking-tight text-black">{`${props.pricePerNight} `}</span>
+                        <span className="text-xl font-bold leading-none tracking-tight text-black">{`${props.currencyCode} ${props.pricePerNight} `}</span>
                         <span>night</span>
                     </p>
                     <div className="flex items-center">
@@ -23,21 +82,35 @@ const ReservationWidget = (props: IReservationWidget) => {
                 <div className="mt-10">
                     <div className="flex items-center sm:inline-flex">
                         <div>
-                            <input name="start" type="date" className="border border-brand text-black text-sm rounded-lg block w-full pl-10 p-2.5 dark:bg-white dark:placeholder-brand dark:text-black" placeholder="Start Date" />
+                            <DatePicker
+                                name="start"
+                                value={reservationStates.startDate.toLocaleDateString()}
+                                onChange={(e: Date) => setReservationStates({ ...reservationStates, startDate: e })}
+                                className="border border-brand text-black text-sm rounded-lg block w-full pl-10 p-2.5 dark:bg-white dark:placeholder-brand dark:text-black"
+                                minDate={reservationStates.startDate}
+                            />
                         </div>
                         <span> To </span>
                         <div>
-                            <input name="end" type="date" className="border border-brand text-black text-sm rounded-lg block w-full pl-10 p-2.5 dark:bg-white  dark:placeholder-brand dark:text-black" placeholder="End Date" />
+                            <DatePicker
+                                name="end"
+                                value={reservationStates.endDate.toLocaleDateString()}
+                                onChange={(e: Date) => setReservationStates({ ...reservationStates, endDate: e })}
+                                className="border border-brand text-black text-sm rounded-lg block w-full pl-10 p-2.5 dark:bg-white  dark:placeholder-brand dark:text-black"
+                                minDate={reservationStates.endDate}
+                            />
                         </div>
                     </div>
                 </div>
                 <div className="w-full mt-3">
+                    <span>Guests</span>
                     <input
-                        type="number"
-                        name="guest"
+                        onChange={(e: FormEvent<HTMLInputElement>) => handleChange(e)}
+                        type="text"
+                        name="guests"
                         className="bg-white border border-brand text-black sm:text-sm rounded-lg w-full pl-10 p-2.5"
-                        placeholder="Number of Guest"
                         min={0}
+                        value={reservationStates.guests}
                     />
                 </div>
                 <div className="mt-6">
@@ -47,7 +120,25 @@ const ReservationWidget = (props: IReservationWidget) => {
                     <p>You won't be charged yet</p>
                 </div>
                 <div className="mt-6">
-
+                    <div className="flex justify-between">
+                        <p>
+                            <u className="uderline">{`${props.currencyCode} ${props.pricePerNight} x ${reservationStates.nights} ${reservationStates.nights == 1 ? 'night' : 'nights'}`}</u>
+                        </p>
+                        <p>{`${props.currencySymbol} ${reservationStates.subtotal} ${props.currencyCode}`}</p>
+                    </div>
+                    <div className="mt-1 flex justify-between">
+                        <p>
+                            <u className="uderline">HostShare service fee</u>
+                        </p>
+                        <p>{`${props.currencySymbol} ${reservationStates.subtotal > 0 ? HOSTSHARE_FEE : 0} ${props.currencyCode}`}</p>
+                    </div>
+                    <div className="mt-6">
+                        <hr />
+                        <div className="mt-1 flex justify-between">
+                            <p className="font-bold">Total</p>
+                            <p>{`${props.currencySymbol} ${reservationStates.total} ${props.currencyCode}`}</p>
+                        </div>
+                    </div>
                 </div>
             </div >
         </>

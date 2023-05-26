@@ -100,9 +100,12 @@ const Listing = (props: IListing) => {
                     <div className="float-right w-2/4 mx-3">
                         <div className="flex justify-center sticky top-0">
                             <ReservationWidget
-                                pricePerNight={`${props.property.info.currency.code} ${props.property.info.price}`}
+                                pricePerNight={props.property.info.price}
+                                currencyCode={props.property.info.currency.code}
+                                currencySymbol={props.property.info.currency.symbol}
                                 rating={props.property.info.ratings.guestSatisfactionOverall}
                                 reviews={props.property.info.visibleReviewCount}
+                                guestCapacity={props.property.info.maxGuestCapacity}
                             />
                         </div>
                     </div>
