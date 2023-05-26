@@ -47,7 +47,7 @@ const Listing = (props: IListing) => {
     }
 
     return (
-        <div className="m-3 p-3">
+        <div className="m-3 p-5">
             <Head>
                 <title>Listing Property</title>
             </Head>
@@ -84,11 +84,11 @@ const Listing = (props: IListing) => {
                             <div>
                                 <span className="text-sm bg-gray-800 rounded-full focus:ring-gray-300 dark:focus:ring-gray-600">
                                     <Image
-                                        className="w-10 h-10 rounded-full"
+                                        className="w-15 h-15 rounded-full"
                                         src={props.property.info.host.avatar.url}
                                         alt={`profile_${props.property.info.id}`}
-                                        width={36}
-                                        height={36} />
+                                        width={45}
+                                        height={45} />
                                 </span>
                             </div>
                         </div>
@@ -100,7 +100,7 @@ const Listing = (props: IListing) => {
                     <div className="float-right w-2/4 mx-3">
                         <div className="flex justify-center sticky top-0">
                             <ReservationWidget
-                                pricePerNight={`${props.property.info.currency.code} ${props.property.info.price} night`}
+                                pricePerNight={`${props.property.info.currency.code} ${props.property.info.price}`}
                                 rating={props.property.info.ratings.guestSatisfactionOverall}
                                 reviews={props.property.info.visibleReviewCount}
                             />

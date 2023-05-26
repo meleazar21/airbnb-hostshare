@@ -101,7 +101,7 @@ export default function Home(props: IHome) {
       </Head>
       <NavBar onSearch={handleSearch} onSearchGuest={handleSearchByGuest} />
       <FilterSection filter={categories} onHandleClick={handleClickFilter} />
-      <section className="flex flex-wrap items-stretch">
+      <section className="flex justify-center px-1 py-1 flex-wrap items-stretch">
         {!loading ? filteredProperties.length > 0 && filteredProperties.map((property, index) => {
           return (
             <CardProperty

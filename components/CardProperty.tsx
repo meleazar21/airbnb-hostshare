@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import StarIcon from "./icons/StarIcon";
+import { Paths } from "@/constants/paths";
 
 interface ICard {
     imageUrl: string;
@@ -18,7 +19,7 @@ const CardProperty = (props: ICard) => {
         <>
             <motion.div whileHover={{ scaleY: 1.1 }} className="max-w-sm max-h-sm bg-white m-3 border border-brand rounded-lg shadow dark:bg-white dark:border-brand">
                 <div className="max-w-sm h-none">
-                    <Link href={`/listing/${props.id}`} className="max-w-full">
+                    <Link href={`${Paths.Listing}${props.id}`} className="max-w-full">
                         <Image className="rounded-t-lg w-96 h-60" src={props.imageUrl} width={300} height={300} alt={props.id} />
                     </Link>
                 </div>
