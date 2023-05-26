@@ -9,7 +9,8 @@ interface ICard {
     id: string;
     rate: number;
     price: string;
-    guestCapacity: string
+    guestCapacity: string;
+    location: string;
 }
 
 const CardProperty = (props: ICard) => {
@@ -31,6 +32,7 @@ const CardProperty = (props: ICard) => {
                             <p className="mx-2">{`${props.rate}`}</p>
                         </div>
                     </div>
+                    <p className="mb-1 text-gray-500 dark:text-gray-500">{props.location}</p>
                     <p className="mb-1 text-gray-500 dark:text-gray-500">{props.guestCapacity}</p>
                     <p className="mb-1 font-bold text-black dark:text-black">{`${props.price} night`}</p>
                 </div>

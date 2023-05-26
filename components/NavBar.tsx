@@ -1,14 +1,17 @@
 import Image from "next/image";
-import { FormEvent, useState } from "react";
-import CalendarInputIcon from "./icons/CalendarInputIcon";
+import { FormEvent } from "react";
 
 interface INavBar {
     onSearch: Function;
+    onSearchGuest: Function;
 }
 const NavBar = (props: INavBar) => {
 
     const handleChange = (e: FormEvent<HTMLInputElement>) => {
-        props.onSearch(e.currentTarget.value);
+        if (e.currentTarget.name === 'city')
+            props.onSearch(e.currentTarget.value);
+        else
+            props.onSearchGuest(parseInt(e.currentTarget.value));
     }
 
     return (
@@ -25,12 +28,21 @@ const NavBar = (props: INavBar) => {
                                     <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" /></svg>
                                 </div>
                                 <input
-                                    onChange={(e: React.FormEvent<HTMLInputElement>) => handleChange(e)}
-                                    type="text"
-                                    name="email"
+                                    onChange={(e: React.FormEvent<HTMLInputElement>) => handleChange(e)} type="text"
+                                    name="city"
                                     id="topbar-search"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-white-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     placeholder="Search by city"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    onChange={(e: React.FormEvent<HTMLInputElement>) => handleChange(e)}
+                                    type="number"
+                                    name="guest"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-white-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    placeholder="Number of Guest"
+                                    min={0}
                                 />
                             </div>
                             <div className="flex-1 mx-2">

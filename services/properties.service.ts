@@ -6,9 +6,7 @@ import { removeDuplicateObjectsById } from "@/utils/array.utils";
 class PropertiesService {
     getProperties() {
         const result = data as IData;
-        const uniqueElements = removeDuplicateObjectsById(result.data);
-        console.log({ uniqueElements });
-        return uniqueElements;
+        return result.data;
     }
 }
 

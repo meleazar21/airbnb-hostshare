@@ -65,10 +65,10 @@ export interface IInfo {
     ratings: IRatings
     price: number;
     currency: ICurrency;
-    category?: string;
 }
 
 export interface IProperty {
     type: string;
-    info: IInfo
+    info: IInfo;
+    category?: string;
 }
