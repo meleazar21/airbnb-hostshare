@@ -1,4 +1,4 @@
-import { ICategory, ICategoryFilter } from "@/interfaces/common.interface";
+import { ICategoryFilter } from "@/interfaces/common.interface";
 import FilterCategory from "./FilterCategory";
 
 interface IFilterSection {

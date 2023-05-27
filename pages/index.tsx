@@ -7,6 +7,7 @@ import { ICategoryFilter } from "@/interfaces/common.interface";
 import { IProperty } from "@/models/property.model";
 import { categoriesService } from "@/services/categories.service";
 import { propertiesService } from "@/services/properties.service";
+import { getCategoryName } from "@/utils/property.utils";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useState, useEffect } from "react";
@@ -48,18 +49,34 @@ export default function Home(props: IHome) {
 
   const handleClickFilter = (filter: { categoryId: string; selected: boolean }) => {
     setLoading(true);
-    const newFiltered = categories as ICategoryFilter[];
-    const result = newFiltered.map(f => {
+    const newFilteredCategories = categories as ICategoryFilter[];
+    const result = newFilteredCategories.map(f => {
       if (f.category.id === filter.categoryId) {
         return { ...f, selected: filter.selected };
       }
-
       return { ...f };
     });
+    result.forEach(item => {
+      if (item.category.id !== filter.categoryId)
+        item.selected = false;
+      else
+        item.selected = filter.selected;
+    });
+
+    let newFiltered = propertiesService.getPropertiesByCategoryId(filter.categoryId);
+
+    if (!isNaN(parseInt(search.guest))) {
+      const numberOfGuests = isNaN(parseInt(search.guest)) ? 0 : parseInt(search.guest)
+      newFiltered = newFiltered.filter(property => property.info.maxGuestCapacity === numberOfGuests);
+    }
+    if (search.city) {
+      newFiltered = filteredProperties.filter(property => property.info.location.city.toLowerCase().includes(search.city.toLowerCase()));
+    }
     setCategories(result);
     const searchByCategory = setTimeout(() => {
       if (filter.selected) {
-        const newFiltered = filteredProperties.filter(property => property.category === filter.categoryId);
+        newFiltered = newFiltered.filter(property => property.category === filter.categoryId);
+        console.log(newFiltered);
         setFilteredProperties(newFiltered);
       } else {
         setFilteredProperties(props.properties);
@@ -135,6 +152,7 @@ export default function Home(props: IHome) {
               price={`${property.info.currency.symbol} ${property.info.price}`}
               guestCapacity={`${property.info.maxGuestCapacity} Guests`}
               location={`${property.info.location.city}, ${property.info.location.country.title}`}
+              type={getCategoryName(property?.category ?? "", categories.map(c => c.category)) ?? ""}
             />
           )
         })

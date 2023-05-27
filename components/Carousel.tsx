@@ -27,7 +27,6 @@ const Carousel = (props: ICarousel) => {
     return (
         <>
             <div id="controls-carousel" className="relative w-3/4 h-3/4" data-carousel="static">
-                {/* Carousel wrapper */}
                 <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
                     {props.images.map((image: string, index: number) => {
                         return (

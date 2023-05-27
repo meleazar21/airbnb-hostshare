@@ -12,9 +12,11 @@ interface ICard {
     price: string;
     guestCapacity: string;
     location: string;
+    type: string;
 }
 
 const CardProperty = (props: ICard) => {
+
     return (
         <>
             <motion.div whileHover={{ scaleY: 1.1 }} className="max-w-sm max-h-sm bg-white m-3 border border-brand rounded-lg shadow dark:bg-white dark:border-brand">
@@ -35,6 +37,7 @@ const CardProperty = (props: ICard) => {
                     </div>
                     <p className="mb-1 text-gray-500 dark:text-gray-500">{props.location}</p>
                     <p className="mb-1 text-gray-500 dark:text-gray-500">{props.guestCapacity}</p>
+                    <p className="mb-1 text-gray-500 dark:text-gray-500">{props.type}</p>
                     <p className="mb-1 font-bold text-black dark:text-black">{`${props.price} night`}</p>
                 </div>
             </motion.div>

@@ -67,12 +67,12 @@ const Listing = (props: IListing) => {
                     </div>
                 </div>
             </section>
-            <section className="flex justify-center	m-3 p-3">
+            <section className="flex justify-center	m-3 p-3 sm: w-full md:w-full">
                 <Carousel images={getPhotoImages()} />
             </section>
             <aside>
                 <div className="sm:flex justify-center sm:flex-nowrap">
-                    <div className="lg:float-left w-2/4 mx-3 xl:float-left w-2/4 mx-3">
+                    <div className="lg:float-left xl:w-2/4 lg:w-2/4 mx-3 xl:float-left">
                         <div className="flex justify-between mb-4">
                             <div>
                                 <h4 className="text-2xl font-semi-bold leading-none tracking-tight text-black">
@@ -98,7 +98,7 @@ const Listing = (props: IListing) => {
                             <Amenities amenities={props.property.info.amenities} />
                         </div>
                     </div>
-                    <div className="xl:float-right w-2/4 mx-3 lg:float-right w-2/4 mx-3">
+                    <div className="xl:float-right sm:w-full md:w-full lg:w-2/4 mx-3 lg:float-right mx-3">
                         <div className="flex justify-center sticky top-0">
                             <ReservationWidget
                                 pricePerNight={props.property.info.price}
