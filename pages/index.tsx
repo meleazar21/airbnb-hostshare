@@ -1,6 +1,6 @@
 import CardProperty from "@/components/CardProperty";
 import FilterSection from "@/components/FilterSection";
-import HeaderHostShare from "@/components/HeaderHostShare";
+import FooterHostShare from "@/components/FooterHostShare";
 import NavBar from "@/components/NavBar";
 import Skeleton from "@/components/Skeleton";
 import { ICategoryFilter } from "@/interfaces/common.interface";
@@ -9,7 +9,7 @@ import { categoriesService } from "@/services/categories.service";
 import { propertiesService } from "@/services/properties.service";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export const getStaticProps: GetStaticProps = () => {
   const properties = propertiesService.getProperties();
@@ -20,34 +20,31 @@ export const getStaticProps: GetStaticProps = () => {
   };
 }
 
+interface ISearch {
+  city: string;
+  guest: string;
+}
+
 interface IHome {
   properties: Array<IProperty>;
 }
 export default function Home(props: IHome) {
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<ISearch>({ city: '', guest: '' });
   const [filteredProperties, setFilteredProperties] = useState<Array<IProperty>>(props.properties);
   const [categories, setCategories] = useState<Array<ICategoryFilter>>([]);
 
-  const handleSearchByGuest = (guests: number) => {
+  const handleSearchGuest = (criteria: string) => {
+    const guestsNumber = criteria.replace(/\D/g, '');
+    setSearch({ ...search, guest: guestsNumber });
     setLoading(true);
-    const searchGuest = setTimeout(() => {
-      if (isNaN(guests)) {
-        setFilteredProperties(props.properties)
-      } else {
-        const newFiltered = filteredProperties.filter(p => p.info.maxGuestCapacity === guests);
-        setFilteredProperties(newFiltered);
-      }
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(searchGuest);
   }
 
-  const handleSearch = useCallback((criteria: string) => {
-    setSearch(criteria);
+  const handleSearch = (criteria: string) => {
+    setSearch({ ...search, city: criteria });
     setLoading(true);
-  }, [search])
+  }
 
   const handleClickFilter = (filter: { categoryId: string; selected: boolean }) => {
     setLoading(true);
@@ -75,8 +72,12 @@ export default function Home(props: IHome) {
 
   useEffect(() => {
     const filterDebounce = setTimeout(() => {
-      if (search) {
-        const newFiltered = filteredProperties.filter(property => property.info.location.city.toLowerCase().includes(search.toLowerCase()));
+      if (search.city) {
+        let newFiltered = filteredProperties.filter(property => property.info.location.city.toLowerCase().includes(search.city.toLowerCase()));
+        if (search.guest) {
+          const numberOfGuests = isNaN(parseInt(search.guest)) ? 0 : parseInt(search.guest)
+          newFiltered = newFiltered.filter(property => property.info.maxGuestCapacity === numberOfGuests);
+        }
         setFilteredProperties(newFiltered);
       } else {
         setFilteredProperties(props.properties);
@@ -84,7 +85,23 @@ export default function Home(props: IHome) {
       setLoading(false);
     }, 2000);
     return () => clearTimeout(filterDebounce);
-  }, [handleSearch])
+  }, [search.city])
+
+  useEffect(() => {
+    const searchGuest = setTimeout(() => {
+      if (isNaN(parseInt(search.guest))) {
+        setFilteredProperties(props.properties)
+      } else {
+        let newFiltered = filteredProperties.filter(p => p.info.maxGuestCapacity === parseInt(search.guest));
+        if (search.city.trim()) {
+          newFiltered = newFiltered.filter(property => property.info.location.city.toLowerCase().includes(search.city.toLowerCase()))
+        }
+        setFilteredProperties(newFiltered);
+      }
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(searchGuest);
+  }, [search.guest])
 
 
   useEffect(() => {
@@ -100,7 +117,11 @@ export default function Home(props: IHome) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar onSearch={handleSearch} onSearchGuest={handleSearchByGuest} />
+      <NavBar
+        guestNumber={search.guest}
+        onSearch={handleSearch}
+        onSearchGuest={handleSearchGuest}
+      />
       <FilterSection filter={categories} onHandleClick={handleClickFilter} />
       <section className="flex justify-center px-1 py-1 flex-wrap items-stretch">
         {!loading ? filteredProperties.length > 0 && filteredProperties.map((property, index) => {
@@ -120,7 +141,7 @@ export default function Home(props: IHome) {
           : <Skeleton />
         }
       </section>
-      <HeaderHostShare />
+      <FooterHostShare />
     </div>
   )
 }

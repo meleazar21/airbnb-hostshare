@@ -1,5 +1,5 @@
 import Carousel from "@/components/Carousel";
-import HeaderHostShare from "@/components/HeaderHostShare";
+import HeaderHostShare from "@/components/FooterHostShare";
 import CheckIcon from "@/components/icons/CheckIcon";
 import StarIcon from "@/components/icons/StarIcon";
 import Amenities from "@/components/listing/Amenities";
