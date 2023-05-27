@@ -1,5 +1,6 @@
 import CardProperty from "@/components/CardProperty";
 import FilterSection from "@/components/FilterSection";
+import HeaderHostShare from "@/components/HeaderHostShare";
 import NavBar from "@/components/NavBar";
 import Skeleton from "@/components/Skeleton";
 import { ICategoryFilter } from "@/interfaces/common.interface";
@@ -119,6 +120,7 @@ export default function Home(props: IHome) {
           : <Skeleton />
         }
       </section>
+      <HeaderHostShare />
     </div>
   )
 }

@@ -63,7 +63,7 @@ const ReservationWidget = (props: IReservationWidget) => {
 
     return (
         <>
-            <div className="p-4 max-w-sm rounded overflow-hidden shadow-lg w-full">
+            <div className="p-4 rounded overflow-hidden shadow-lg w-full sm:w-full max-w-sm">
                 <div className="flex justify-between">
                     <p>
                         <span className="text-xl font-bold leading-none tracking-tight text-black">{`${props.currencyCode} ${props.pricePerNight} `}</span>
@@ -116,13 +116,13 @@ const ReservationWidget = (props: IReservationWidget) => {
                     <p>You won't be charged yet</p>
                 </div>
                 <div className="mt-6">
-                    <div className="flex justify-between">
+                    <div className="md:flex md:justify-between lg:flex lg:justify-between sm:flex-nowrap sm:flex">
                         <p>
                             <u className="uderline">{`${props.currencyCode} ${props.pricePerNight} x ${reservationStates.nights} ${reservationStates.nights == 1 ? 'night' : 'nights'}`}</u>
                         </p>
                         <p>{`${props.currencySymbol} ${reservationStates.subtotal.toFixed(parseInt(NUMBER_OF_DECIMALS))} ${props.currencyCode}`}</p>
                     </div>
-                    <div className="mt-1 flex justify-between">
+                    <div className="mt-1 md:flex md:justify-between lg:flex lg:justify-between sm:flex-nowrap sm:flex">
                         <p>
                             <u className="uderline">HostShare service fee</u>
                         </p>
@@ -130,7 +130,7 @@ const ReservationWidget = (props: IReservationWidget) => {
                     </div>
                     <div className="mt-6">
                         <hr />
-                        <div className="mt-1 flex justify-between">
+                        <div className="mt-1 md:flex md:justify-between lg:flex lg:justify-between sm:flex-nowrap sm:flex">
                             <p className="font-bold">Total</p>
                             <p>{`${props.currencySymbol} ${reservationStates.total.toFixed(parseInt(NUMBER_OF_DECIMALS))} ${props.currencyCode}`}</p>
                         </div>

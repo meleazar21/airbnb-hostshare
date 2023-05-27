@@ -1,4 +1,5 @@
 import Carousel from "@/components/Carousel";
+import HeaderHostShare from "@/components/HeaderHostShare";
 import CheckIcon from "@/components/icons/CheckIcon";
 import StarIcon from "@/components/icons/StarIcon";
 import Amenities from "@/components/listing/Amenities";
@@ -70,8 +71,8 @@ const Listing = (props: IListing) => {
                 <Carousel images={getPhotoImages()} />
             </section>
             <aside>
-                <div className="flex">
-                    <div className="float-left w-2/4 mx-3">
+                <div className="sm:flex justify-center sm:flex-nowrap">
+                    <div className="lg:float-left w-2/4 mx-3 xl:float-left w-2/4 mx-3">
                         <div className="flex justify-between mb-4">
                             <div>
                                 <h4 className="text-2xl font-semi-bold leading-none tracking-tight text-black">
@@ -97,7 +98,7 @@ const Listing = (props: IListing) => {
                             <Amenities amenities={props.property.info.amenities} />
                         </div>
                     </div>
-                    <div className="float-right w-2/4 mx-3">
+                    <div className="xl:float-right w-2/4 mx-3 lg:float-right w-2/4 mx-3">
                         <div className="flex justify-center sticky top-0">
                             <ReservationWidget
                                 pricePerNight={props.property.info.price}
