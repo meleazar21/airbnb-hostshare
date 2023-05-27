@@ -1,6 +1,4 @@
 import Carousel from "@/components/Carousel";
-import HeaderHostShare from "@/components/FooterHostShare";
-import CheckIcon from "@/components/icons/CheckIcon";
 import StarIcon from "@/components/icons/StarIcon";
 import Amenities from "@/components/listing/Amenities";
 import LocationSection from "@/components/listing/LocationSection";
@@ -13,10 +11,10 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
-export const getStaticProps: GetStaticProps = (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
     const params = context.params as IParam;
-    const data = propertiesService.getProperties();
-    const property = data.find(p => p.info.id === params.slug);
+    const data = await propertiesService.getProperties();
+    const property = data.find(p => p.info.id === params.id);
     return {
         props: {
             property
@@ -24,18 +22,16 @@ export const getStaticProps: GetStaticProps = (context) => {
     }
 }
 
-export const getStaticPaths: GetStaticPaths = () => {
-    const data = propertiesService.getProperties();
-    const paths = data.map(p => {
-        return {
-            params: {
-                slug: p.info.id
-            }
+export const getStaticPaths: GetStaticPaths = async () => {
+    const data = await propertiesService.getProperties();
+    const paths = data.map(({ info: { id } }) => ({
+        params: {
+            id
         }
-    });
+    }));
     return {
         paths,
-        fallback: true
+        fallback: 'blocking'
     };
 }
 

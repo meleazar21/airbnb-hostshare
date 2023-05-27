@@ -63,7 +63,8 @@ export default function Home(props: IHome) {
         item.selected = filter.selected;
     });
 
-    let newFiltered = propertiesService.getPropertiesByCategoryId(filter.categoryId);
+    let newFiltered = filter.selected ? propertiesService.getPropertiesByCategoryId(filter.categoryId)
+      : propertiesService.getAllProperties();
 
     if (!isNaN(parseInt(search.guest))) {
       const numberOfGuests = isNaN(parseInt(search.guest)) ? 0 : parseInt(search.guest)
@@ -74,10 +75,11 @@ export default function Home(props: IHome) {
     }
     setCategories(result);
     const searchByCategory = setTimeout(() => {
-      if (filter.selected) {
+      if (filter.selected && !search.city.trim() || !search.guest.trim()) {
         newFiltered = newFiltered.filter(property => property.category === filter.categoryId);
-        console.log(newFiltered);
         setFilteredProperties(newFiltered);
+      } else if (!filter.selected && search.city.trim() || search.guest.trim()) {
+        setFilteredProperties(newFiltered)
       } else {
         setFilteredProperties(props.properties);
       }
@@ -107,7 +109,16 @@ export default function Home(props: IHome) {
   useEffect(() => {
     const searchGuest = setTimeout(() => {
       if (isNaN(parseInt(search.guest))) {
-        setFilteredProperties(props.properties)
+        let newFiltered = propertiesService.getAllProperties();
+        if (search.city.trim()) {
+          newFiltered = newFiltered.filter(property => property.info.location.city.toLowerCase().includes(search.city.toLowerCase()))
+        }
+        const index = categories.findIndex(c => c.selected);
+        if (index !== -1) {
+          const filteredCategory = categories[index]?.category.id;
+          newFiltered = newFiltered.filter(property => property.category === filteredCategory);
+        }
+        setFilteredProperties(newFiltered);
       } else {
         let newFiltered = filteredProperties.filter(p => p.info.maxGuestCapacity === parseInt(search.guest));
         if (search.city.trim()) {
@@ -140,7 +151,7 @@ export default function Home(props: IHome) {
         onSearchGuest={handleSearchGuest}
       />
       <FilterSection filter={categories} onHandleClick={handleClickFilter} />
-      <section className="flex justify-center px-1 py-1 flex-wrap items-stretch">
+      <section className="flex mb-2 justify-center px-1 py-1 flex-wrap items-stretch">
         {!loading ? filteredProperties.length > 0 && filteredProperties.map((property, index) => {
           return (
             <CardProperty

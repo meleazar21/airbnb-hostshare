@@ -4,7 +4,7 @@ import data from '../data/data.json';
 class CategoriesService {
 
     getCategories() {
-        const result = data as IData;
+        const result = data as unknown as IData;
         return result.categories.map((category) => {
             const categoryFilter: ICategoryFilter = {
                 category,
