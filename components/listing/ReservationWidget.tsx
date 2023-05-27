@@ -3,7 +3,8 @@ import StarIcon from "../icons/StarIcon";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getNumberOfNights } from "@/utils/dates.utils";
-import { HOSTSHARE_FEE, MINIMUM_GUESTS } from "@/constants/commonStrings";
+import { HOSTSHARE_FEE, MAX_LENGTH_NUMBER_INPUT, NUMBER_OF_DECIMALS } from "@/constants/commonStrings";
+import { calculateSubtotal } from "@/utils/property.utils";
 
 interface IReservationWidget {
     pricePerNight: number;
@@ -43,20 +44,14 @@ const ReservationWidget = (props: IReservationWidget) => {
                 });
                 break;
             case "guests":
+                const numericValue = value.replace(/\D/g, '');
                 setReservationStates({
                     ...reservationStates,
-                    guests: value
+                    guests: numericValue
                 });
                 break;
         }
 
-    }
-
-    const calculateSubtotal = (price: number, nights: number, guests: number, guestsLimit: number) => {
-        if (guests <= parseInt(MINIMUM_GUESTS) && nights > 0 && guests > 0) return price;
-        const pricePerGuest = price / guestsLimit;
-        const result = pricePerGuest * guests * nights;
-        return result;
     }
 
     useEffect(() => {
@@ -97,7 +92,7 @@ const ReservationWidget = (props: IReservationWidget) => {
                                 value={reservationStates.endDate.toLocaleDateString()}
                                 onChange={(e: Date) => setReservationStates({ ...reservationStates, endDate: e })}
                                 className="border border-brand text-black text-sm rounded-lg block w-full pl-10 p-2.5 dark:bg-white  dark:placeholder-brand dark:text-black"
-                                minDate={reservationStates.endDate}
+                                minDate={reservationStates.startDate}
                             />
                         </div>
                     </div>
@@ -111,6 +106,7 @@ const ReservationWidget = (props: IReservationWidget) => {
                         className="bg-white border border-brand text-black sm:text-sm rounded-lg w-full pl-10 p-2.5"
                         min={0}
                         value={reservationStates.guests}
+                        maxLength={parseInt(MAX_LENGTH_NUMBER_INPUT)}
                     />
                 </div>
                 <div className="mt-6">
@@ -124,7 +120,7 @@ const ReservationWidget = (props: IReservationWidget) => {
                         <p>
                             <u className="uderline">{`${props.currencyCode} ${props.pricePerNight} x ${reservationStates.nights} ${reservationStates.nights == 1 ? 'night' : 'nights'}`}</u>
                         </p>
-                        <p>{`${props.currencySymbol} ${reservationStates.subtotal} ${props.currencyCode}`}</p>
+                        <p>{`${props.currencySymbol} ${reservationStates.subtotal.toFixed(parseInt(NUMBER_OF_DECIMALS))} ${props.currencyCode}`}</p>
                     </div>
                     <div className="mt-1 flex justify-between">
                         <p>
@@ -136,7 +132,7 @@ const ReservationWidget = (props: IReservationWidget) => {
                         <hr />
                         <div className="mt-1 flex justify-between">
                             <p className="font-bold">Total</p>
-                            <p>{`${props.currencySymbol} ${reservationStates.total} ${props.currencyCode}`}</p>
+                            <p>{`${props.currencySymbol} ${reservationStates.total.toFixed(parseInt(NUMBER_OF_DECIMALS))} ${props.currencyCode}`}</p>
                         </div>
                     </div>
                 </div>

@@ -29,7 +29,6 @@ export default function Home(props: IHome) {
   const [filteredProperties, setFilteredProperties] = useState<Array<IProperty>>(props.properties);
   const [categories, setCategories] = useState<Array<ICategoryFilter>>([]);
 
-
   const handleSearchByGuest = (guests: number) => {
     setLoading(true);
     const searchGuest = setTimeout(() => {
@@ -53,8 +52,9 @@ export default function Home(props: IHome) {
     setLoading(true);
     const newFiltered = categories as ICategoryFilter[];
     const result = newFiltered.map(f => {
-      if (f.category.id === filter.categoryId)
+      if (f.category.id === filter.categoryId) {
         return { ...f, selected: filter.selected };
+      }
 
       return { ...f };
     });
