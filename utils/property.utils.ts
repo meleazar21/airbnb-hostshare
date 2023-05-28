@@ -5,7 +5,7 @@ import { ICategory } from "@/interfaces/common.interface";
 
 export const getPropertyDetails = (proper: IProperty) => {
     let detail = "";
-    proper.info.details.data.forEach((d) => {
+    proper.info?.details.data.forEach((d) => {
         detail = detail + `${d.value} ${d.type} · `;
     });
 

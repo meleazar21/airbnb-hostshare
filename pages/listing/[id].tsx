@@ -11,9 +11,9 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = (context) => {
     const params = context.params as IParam;
-    const data = await propertiesService.getProperties();
+    const data = propertiesService.getAllProperties();
     const property = data.find(p => p.info.id === params.id);
     return {
         props: {
@@ -22,8 +22,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-    const data = await propertiesService.getProperties();
+export const getStaticPaths: GetStaticPaths = () => {
+    const data = propertiesService.getAllProperties();
     const paths = data.map(({ info: { id } }) => ({
         params: {
             id
@@ -31,7 +31,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }));
     return {
         paths,
-        fallback: 'blocking'
+        fallback: false
     };
 }
 

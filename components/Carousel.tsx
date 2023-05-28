@@ -28,7 +28,7 @@ const Carousel = (props: ICarousel) => {
         <>
             <div id="controls-carousel" className="relative w-3/4 h-3/4" data-carousel="static">
                 <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-                    {props.images.map((image: string, index: number) => {
+                    {props.images?.map((image: string, index: number) => {
                         return (
                             <div className={`${currentIndex !== index ? "hidden" : ""}`} data-carousel-item="active" key={index}>
                                 <Image src={image} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." width={300} height={300} />
