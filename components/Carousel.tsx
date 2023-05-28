@@ -45,7 +45,7 @@ const Carousel = (props: ICarousel) => {
                 </button>
                 <button type="button" onClick={moveNext} className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
                     <NextArrowIcon
-                        className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-white-500 group-hover:bg-white dark:group-hover:bg-gray-200 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+                        className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-white-500 group-hover:bg-white dark:group-hover:bg-gray-200 group-focus:ring-4 group-focus:ring-gray dark:group-focus:ring-gray-800/70 group-focus:outline-none"
                         type={ArrowType.Next}
                     />
                 </button>
