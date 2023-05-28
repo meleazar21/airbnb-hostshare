@@ -19,7 +19,7 @@ const NavBar = (props: INavBar) => {
     return (
         <header>
             <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
-                <div className="sm:flex-nowrap lg:flex flex-wrap justify-between items-center">
+                <div className="sm:flex-nowrap md:flex lg:flex flex-wrap justify-between items-center">
                     <div className="sm:mx-1 flex justify-start items-center">
                         <Image src="/statics/logo.png" className="mr-3 h-8" alt="logo" width={130} height={36} />
                     </div>
