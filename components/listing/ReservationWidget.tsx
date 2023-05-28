@@ -116,7 +116,7 @@ const ReservationWidget = (props: IReservationWidget) => {
                     <p>You won't be charged yet</p>
                 </div>
                 <div className="mt-6">
-                    <div className="md:flex md:justify-between lg:flex lg:justify-between sm:flex-nowrap sm:flex sm:justify-center">
+                    <div className="md:flex md:justify-between lg:flex lg:justify-between sm:grid sm:justify-center">
                         <p>
                             <u className="uderline">{`${props.currencyCode} ${props.pricePerNight} x ${reservationStates.nights} ${reservationStates.nights == 1 ? 'night' : 'nights'}`}</u>
                         </p>

@@ -49,8 +49,8 @@ const NavBar = (props: INavBar) => {
                             />
                         </div>
                     </div>
-                    <div className="sm:flex items-center lg:order-2">
-                        <Image className="sm:mt-1 w-10 h-10 rounded-full" src="/statics/profile.jpg" alt="profile photo" width={36} height={36} />
+                    <div className="mt-1 items-center lg:order-2">
+                        <Image className="mt-1 w-10 h-10 rounded-full" src="/statics/profile.jpg" alt="profile photo" width={36} height={36} />
                     </div>
                 </div>
             </nav>
