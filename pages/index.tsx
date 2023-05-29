@@ -47,6 +47,26 @@ export default function Home(props: IHome) {
     setLoading(true);
   }
 
+  const applyFilters = () => {
+    const categoryIndex = categories.findIndex(c => c.selected);
+    let newFiltered = propertiesService.getAllProperties();
+    if (!search.city.trim() && !search.guest.trim() && categoryIndex === -1) {
+      return [...props.properties];
+    }
+    if (search.city.trim()) {
+      newFiltered = filteredProperties.filter(property => property.info.location.city.toLowerCase().includes(search.city.toLowerCase()));
+    }
+    if (search.guest.trim()) {
+      const numberOfGuests = isNaN(parseInt(search.guest)) ? 0 : parseInt(search.guest)
+      newFiltered = newFiltered.filter(property => property.info.maxGuestCapacity === numberOfGuests);
+    }
+    if (categoryIndex !== -1) {
+      const categoryId = categories[categoryIndex]?.category.id;
+      newFiltered = newFiltered.filter(property => property.category === categoryId);
+    }
+    return newFiltered;
+  }
+
   const handleClickFilter = (filter: { categoryId: string; selected: boolean }) => {
     setLoading(true);
     const newFilteredCategories = categories as ICategoryFilter[];
@@ -75,10 +95,10 @@ export default function Home(props: IHome) {
     }
     setCategories(result);
     const searchByCategory = setTimeout(() => {
-      if (filter.selected && !search.city.trim() || !search.guest.trim()) {
+      if (filter.selected && (!search.city.trim() || !search.guest.trim())) {
         newFiltered = newFiltered.filter(property => property.category === filter.categoryId);
         setFilteredProperties(newFiltered);
-      } else if (!filter.selected && search.city.trim() || search.guest.trim()) {
+      } else if (!filter.selected && (search.city.trim() || search.guest.trim())) {
         setFilteredProperties(newFiltered)
       } else {
         setFilteredProperties(props.properties);
@@ -91,46 +111,12 @@ export default function Home(props: IHome) {
 
   useEffect(() => {
     const filterDebounce = setTimeout(() => {
-      if (search.city) {
-        let newFiltered = filteredProperties.filter(property => property.info.location.city.toLowerCase().includes(search.city.toLowerCase()));
-        if (search.guest) {
-          const numberOfGuests = isNaN(parseInt(search.guest)) ? 0 : parseInt(search.guest)
-          newFiltered = newFiltered.filter(property => property.info.maxGuestCapacity === numberOfGuests);
-        }
-        setFilteredProperties(newFiltered);
-      } else {
-        setFilteredProperties(props.properties);
-      }
+      const newFiltered = applyFilters();
+      setFilteredProperties(newFiltered);
       setLoading(false);
     }, 2000);
     return () => clearTimeout(filterDebounce);
-  }, [search.city])
-
-  useEffect(() => {
-    const searchGuest = setTimeout(() => {
-      if (isNaN(parseInt(search.guest))) {
-        let newFiltered = propertiesService.getAllProperties();
-        if (search.city.trim()) {
-          newFiltered = newFiltered.filter(property => property.info.location.city.toLowerCase().includes(search.city.toLowerCase()))
-        }
-        const index = categories.findIndex(c => c.selected);
-        if (index !== -1) {
-          const filteredCategory = categories[index]?.category.id;
-          newFiltered = newFiltered.filter(property => property.category === filteredCategory);
-        }
-        setFilteredProperties(newFiltered);
-      } else {
-        let newFiltered = filteredProperties.filter(p => p.info.maxGuestCapacity === parseInt(search.guest));
-        if (search.city.trim()) {
-          newFiltered = newFiltered.filter(property => property.info.location.city.toLowerCase().includes(search.city.toLowerCase()))
-        }
-        setFilteredProperties(newFiltered);
-      }
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(searchGuest);
-  }, [search.guest])
-
+  }, [search])
 
   useEffect(() => {
     const result = categoriesService.getCategories();
